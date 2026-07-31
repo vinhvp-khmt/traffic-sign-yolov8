@@ -76,7 +76,10 @@ def resize_frame(frame_bgr, cv2):
 def transcode_for_browser(source_path):
     ffmpeg = shutil.which("ffmpeg")
     if ffmpeg is None:
-        return source_path, False
+        raise RuntimeError(
+            "Không tìm thấy ffmpeg trên môi trường chạy. Trên Streamlit Cloud cần thêm "
+            "`ffmpeg` vào packages.txt rồi redeploy app."
+        )
 
     output_path = source_path.with_name(f"{source_path.stem}_browser.mp4")
     cmd = [
@@ -91,8 +94,9 @@ def transcode_for_browser(source_path):
     ]
     result = subprocess.run(cmd, capture_output=True, text=True, check=False)
     if result.returncode != 0 or not output_path.exists():
-        return source_path, False
-    return output_path, True
+        details = (result.stderr or result.stdout or "không có log").strip()
+        raise RuntimeError(f"Không chuyển video sang H.264 được: {details[-800:]}")
+    return output_path
 
 
 def process_video(uploaded_video, detect, cv2):
@@ -152,14 +156,14 @@ def process_video(uploaded_video, detect, cv2):
 
     cap.release()
     writer.release()
-    playable_path, transcoded = transcode_for_browser(output_path)
+    playable_path = transcode_for_browser(output_path)
     progress.empty()
     status.empty()
     return playable_path, {
         "Số khung hình": frame_index,
         "Tổng phát hiện": total_detections,
         "Khung hình có đèn tín hiệu": light_frames,
-        "Chuẩn phát web": "H.264" if transcoded else "MP4 gốc",
+        "Chuẩn phát web": "H.264",
     }
 
 

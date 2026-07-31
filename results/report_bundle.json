@@ -1,0 +1,468 @@
+{
+  "dataset": {
+    "dataset": "pkdarabi/cardetection",
+    "task": "traffic sign & traffic light object detection",
+    "n_classes": 15,
+    "total_images_scanned": 4969,
+    "total_valid_objects": 6012,
+    "n_train_images": 3530,
+    "n_valid_images": 801,
+    "n_test_images": 638,
+    "background_image_ratio": 0.0008049909438518,
+    "missing_label_files": 0,
+    "invalid_objects": 0,
+    "malformed_label_lines": 0,
+    "dominant_class": "Red Light",
+    "dominant_class_instances": 787,
+    "rarest_nonzero_class": "Speed Limit 10",
+    "rarest_class_instances": 22
+  },
+  "overall": {
+    "valid": {
+      "split": "valid",
+      "images": 801,
+      "instances": 944,
+      "precision": 0.967023,
+      "recall": 0.950666,
+      "map50": 0.976229,
+      "map50_95": 0.82376
+    },
+    "test": {
+      "split": "test",
+      "images": 638,
+      "instances": 770,
+      "precision": 0.960291,
+      "recall": 0.951029,
+      "map50": 0.970263,
+      "map50_95": 0.811996
+    }
+  },
+  "per_class": [
+    {
+      "class_id": 14,
+      "class_name": "Stop",
+      "test_images": 50,
+      "test_instances": 50,
+      "precision": 0.998511,
+      "recall": 1.0,
+      "ap50": 0.995,
+      "ap50_95": 0.899068,
+      "is_traffic_light": false,
+      "category": "Biển báo"
+    },
+    {
+      "class_id": 12,
+      "class_name": "Speed Limit 80",
+      "test_images": 60,
+      "test_instances": 61,
+      "precision": 0.976662,
+      "recall": 1.0,
+      "ap50": 0.995,
+      "ap50_95": 0.877975,
+      "is_traffic_light": false,
+      "category": "Biển báo"
+    },
+    {
+      "class_id": 3,
+      "class_name": "Speed Limit 100",
+      "test_images": 45,
+      "test_instances": 46,
+      "precision": 0.967628,
+      "recall": 1.0,
+      "ap50": 0.994149,
+      "ap50_95": 0.870534,
+      "is_traffic_light": false,
+      "category": "Biển báo"
+    },
+    {
+      "class_id": 11,
+      "class_name": "Speed Limit 70",
+      "test_images": 52,
+      "test_instances": 53,
+      "precision": 0.921754,
+      "recall": 0.943396,
+      "ap50": 0.973431,
+      "ap50_95": 0.867052,
+      "is_traffic_light": false,
+      "category": "Biển báo"
+    },
+    {
+      "class_id": 6,
+      "class_name": "Speed Limit 20",
+      "test_images": 46,
+      "test_instances": 46,
+      "precision": 0.971896,
+      "recall": 0.978261,
+      "ap50": 0.973261,
+      "ap50_95": 0.866319,
+      "is_traffic_light": false,
+      "category": "Biển báo"
+    },
+    {
+      "class_id": 5,
+      "class_name": "Speed Limit 120",
+      "test_images": 40,
+      "test_instances": 44,
+      "precision": 0.930134,
+      "recall": 1.0,
+      "ap50": 0.985494,
+      "ap50_95": 0.863016,
+      "is_traffic_light": false,
+      "category": "Biển báo"
+    },
+    {
+      "class_id": 7,
+      "class_name": "Speed Limit 30",
+      "test_images": 60,
+      "test_instances": 60,
+      "precision": 0.983039,
+      "recall": 0.966005,
+      "ap50": 0.983833,
+      "ap50_95": 0.860135,
+      "is_traffic_light": false,
+      "category": "Biển báo"
+    },
+    {
+      "class_id": 10,
+      "class_name": "Speed Limit 60",
+      "test_images": 45,
+      "test_instances": 45,
+      "precision": 1.0,
+      "recall": 0.932761,
+      "ap50": 0.991676,
+      "ap50_95": 0.858572,
+      "is_traffic_light": false,
+      "category": "Biển báo"
+    },
+    {
+      "class_id": 9,
+      "class_name": "Speed Limit 50",
+      "test_images": 47,
+      "test_instances": 50,
+      "precision": 0.92757,
+      "recall": 0.96,
+      "ap50": 0.987289,
+      "ap50_95": 0.856111,
+      "is_traffic_light": false,
+      "category": "Biển báo"
+    },
+    {
+      "class_id": 8,
+      "class_name": "Speed Limit 40",
+      "test_images": 51,
+      "test_instances": 53,
+      "precision": 0.976522,
+      "recall": 0.962264,
+      "ap50": 0.981858,
+      "ap50_95": 0.838153,
+      "is_traffic_light": false,
+      "category": "Biển báo"
+    },
+    {
+      "class_id": 2,
+      "class_name": "Speed Limit 10",
+      "test_images": 2,
+      "test_instances": 3,
+      "precision": 1.0,
+      "recall": 0.970734,
+      "ap50": 0.995,
+      "ap50_95": 0.8295,
+      "is_traffic_light": false,
+      "category": "Biển báo"
+    },
+    {
+      "class_id": 13,
+      "class_name": "Speed Limit 90",
+      "test_images": 33,
+      "test_instances": 34,
+      "precision": 0.995382,
+      "recall": 0.970588,
+      "ap50": 0.992895,
+      "ap50_95": 0.827129,
+      "is_traffic_light": false,
+      "category": "Biển báo"
+    },
+    {
+      "class_id": 4,
+      "class_name": "Speed Limit 110",
+      "test_images": 21,
+      "test_instances": 21,
+      "precision": 0.906076,
+      "recall": 0.904762,
+      "ap50": 0.929527,
+      "ap50_95": 0.784466,
+      "is_traffic_light": false,
+      "category": "Biển báo"
+    },
+    {
+      "class_id": 0,
+      "class_name": "Green Light",
+      "test_images": 77,
+      "test_instances": 110,
+      "precision": 0.96203,
+      "recall": 0.921345,
+      "ap50": 0.9503,
+      "ap50_95": 0.575613,
+      "is_traffic_light": true,
+      "category": "Đèn tín hiệu"
+    },
+    {
+      "class_id": 1,
+      "class_name": "Red Light",
+      "test_images": 71,
+      "test_instances": 94,
+      "precision": 0.887156,
+      "recall": 0.755319,
+      "ap50": 0.825229,
+      "ap50_95": 0.506292,
+      "is_traffic_light": true,
+      "category": "Đèn tín hiệu"
+    }
+  ],
+  "imbalance_overall": {
+    "split": "overall",
+    "total_instances": 6012,
+    "classes_with_instances": 15,
+    "max_class_count": 787,
+    "min_positive_class_count": 22,
+    "imbalance_ratio": 35.772727,
+    "coef_variation": 0.474358,
+    "normalized_entropy": 0.952828,
+    "gini": 0.246707
+  },
+  "imbalance_by_split": [
+    {
+      "split": "overall",
+      "total_instances": 6012,
+      "classes_with_instances": 15,
+      "max_class_count": 787,
+      "min_positive_class_count": 22,
+      "imbalance_ratio": 35.772727,
+      "coef_variation": 0.474358,
+      "normalized_entropy": 0.952828,
+      "gini": 0.246707
+    },
+    {
+      "split": "train",
+      "total_instances": 4298,
+      "classes_with_instances": 15,
+      "max_class_count": 585,
+      "min_positive_class_count": 19,
+      "imbalance_ratio": 30.789474,
+      "coef_variation": 0.479729,
+      "normalized_entropy": 0.952752,
+      "gini": 0.249977
+    },
+    {
+      "split": "valid",
+      "total_instances": 944,
+      "classes_with_instances": 14,
+      "max_class_count": 122,
+      "min_positive_class_count": 17,
+      "imbalance_ratio": 7.176471,
+      "coef_variation": 0.47512,
+      "normalized_entropy": 0.946619,
+      "gini": 0.258898
+    },
+    {
+      "split": "test",
+      "total_instances": 770,
+      "classes_with_instances": 15,
+      "max_class_count": 110,
+      "min_positive_class_count": 3,
+      "imbalance_ratio": 36.666667,
+      "coef_variation": 0.481063,
+      "normalized_entropy": 0.953365,
+      "gini": 0.247273
+    }
+  ],
+  "split_shift": [
+    {
+      "split_a": "test",
+      "split_b": "train",
+      "js_divergence_bits": 0.002101
+    },
+    {
+      "split_a": "test",
+      "split_b": "valid",
+      "js_divergence_bits": 0.007622
+    },
+    {
+      "split_a": "train",
+      "split_b": "valid",
+      "js_divergence_bits": 0.005816
+    }
+  ],
+  "light_vs_sign": {
+    "signs": {
+      "category": "Biển báo",
+      "n_classes": 13,
+      "mean_map50_95": 0.8536946153846153,
+      "mean_map50": 0.9829548461538462,
+      "mean_recall": 0.968367,
+      "mean_precision": 0.9657826153846152
+    },
+    "lights": {
+      "category": "Đèn tín hiệu",
+      "n_classes": 2,
+      "mean_map50_95": 0.5409525,
+      "mean_map50": 0.8877645000000001,
+      "mean_recall": 0.838332,
+      "mean_precision": 0.924593
+    },
+    "gap": 0.3127,
+    "mannwhitney_p": 0.009524
+  },
+  "rarity": {
+    "spearman_instances_vs_map5095": 0.0322,
+    "p_instances_vs_map5095": 0.9092195514542838,
+    "spearman_instances_vs_recall": -0.2295,
+    "p_instances_vs_recall": 0.4107151308843456,
+    "most_frequent_class": "Green Light",
+    "most_frequent_instances": 110,
+    "most_frequent_map5095": 0.5756,
+    "worst_class": "Red Light",
+    "worst_map5095": 0.5063
+  },
+  "leakage_rows": [
+    {
+      "loai_trung_lap": "Exact duplicate (mọi split)",
+      "so_dong": 460,
+      "pct_tren_tong_the": 4.63
+    },
+    {
+      "loai_trung_lap": "Exact duplicate XUYÊN split",
+      "so_dong": 202,
+      "pct_tren_tong_the": 2.03
+    },
+    {
+      "loai_trung_lap": "dHash trùng (mọi split)",
+      "so_dong": 799,
+      "pct_tren_tong_the": 8.04
+    },
+    {
+      "loai_trung_lap": "dHash trùng XUYÊN split",
+      "so_dong": 423,
+      "pct_tren_tong_the": 4.26
+    }
+  ],
+  "leakage": {
+    "exact_duplicate_rows": 460,
+    "exact_cross_split_duplicate_rows": 202,
+    "exact_cross_split_duplicate_groups": 101,
+    "dhash_collision_rows": 799,
+    "dhash_cross_split_collision_rows": 423,
+    "removed_from_train": 91,
+    "original_train_images": 3530,
+    "clean_train_images": 3439
+  },
+  "size_signals": {
+    "coco_small_object_ratio": 0.3137059214903526,
+    "relative_tiny_object_ratio": 0.1763140385894877,
+    "tiny_ratio_area_lt_0_1pct": 0.186831084225221,
+    "small_ratio_area_lt_1pct": 0.3657515123313169,
+    "border_touch_ratio": 0.0214570858283433,
+    "yolo640_min_side_lt_8px_ratio": 0.1089487691284098,
+    "hires800_min_side_lt_8px_ratio": 0.0808383233532934
+  },
+  "resolution": [
+    {
+      "input_policy": "Letterbox 640",
+      "instances": 6012,
+      "min_side_median_px": 125.384615,
+      "min_side_p10_px": 7.692308,
+      "ratio_min_side_lt_4px": 0.033766,
+      "ratio_min_side_lt_8px": 0.108949,
+      "ratio_min_side_lt_16px": 0.207917,
+      "ratio_min_side_ge_32px": 0.707585
+    },
+    {
+      "input_policy": "Letterbox 1024",
+      "instances": 6012,
+      "min_side_median_px": 200.615385,
+      "min_side_p10_px": 12.307308,
+      "ratio_min_side_lt_4px": 0.007651,
+      "ratio_min_side_lt_8px": 0.049734,
+      "ratio_min_side_lt_16px": 0.132568,
+      "ratio_min_side_ge_32px": 0.760978
+    },
+    {
+      "input_policy": "Short-side 800 / max 1333",
+      "instances": 6012,
+      "min_side_median_px": 156.730769,
+      "min_side_p10_px": 9.615385,
+      "ratio_min_side_lt_4px": 0.020792,
+      "ratio_min_side_lt_8px": 0.080838,
+      "ratio_min_side_lt_16px": 0.173819,
+      "ratio_min_side_ge_32px": 0.731371
+    }
+  ],
+  "split_summary": [
+    {
+      "split": "train",
+      "n_images": 3530,
+      "n_objects": 4298,
+      "objects_per_image_mean": 1.217564,
+      "bbox_area_ratio_median": 0.050865,
+      "bbox_area_px_median": 8802.5,
+      "n_background_images": 3
+    },
+    {
+      "split": "valid",
+      "n_images": 801,
+      "n_objects": 944,
+      "objects_per_image_mean": 1.178527,
+      "bbox_area_ratio_median": 0.132493,
+      "bbox_area_px_median": 22928.0,
+      "n_background_images": 0
+    },
+    {
+      "split": "test",
+      "n_images": 638,
+      "n_objects": 770,
+      "objects_per_image_mean": 1.206897,
+      "bbox_area_ratio_median": 0.049303,
+      "bbox_area_px_median": 8532.125,
+      "n_background_images": 1
+    }
+  ],
+  "train_plan": {
+    "base_model": "yolov8s.pt",
+    "fallback_model": "yolov8n.pt",
+    "stage1_imgsz": 640,
+    "stage1_batch": 16,
+    "stage1_epochs": 60,
+    "stage1_lr0": 0.001,
+    "stage2_imgsz": 768,
+    "stage2_batch": 10,
+    "stage2_epochs": 35,
+    "stage2_lr0": 0.0003,
+    "optimizer": "AdamW",
+    "cos_lr": true,
+    "fliplr": 0.0,
+    "flipud": 0.0,
+    "box": 7.5,
+    "cls": 0.7,
+    "dfl": 1.5,
+    "patience": 15,
+    "params_million": 11.13,
+    "gflops": 28.5,
+    "ultralytics": "8.4.95",
+    "device": "Tesla T4",
+    "inference_ms_per_image": 14.7
+  },
+  "members": [
+    {
+      "id": "KHMT836016",
+      "name": "Huỳnh Phát Lợi"
+    },
+    {
+      "id": "KHMT836034",
+      "name": "Đoàn Huỳnh Thanh Tú"
+    },
+    {
+      "id": "KHMT836036",
+      "name": "Võ Phú Vinh"
+    }
+  ]
+}

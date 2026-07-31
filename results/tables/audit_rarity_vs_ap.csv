@@ -1,0 +1,2 @@
+spearman_instances_vs_map5095,p_instances_vs_map5095,spearman_instances_vs_recall,p_instances_vs_recall,most_frequent_class,most_frequent_instances,most_frequent_map5095,worst_class,worst_map5095
+0.0322,0.9092195514542838,-0.2295,0.41071513088434564,Green Light,110,0.5756,Red Light,0.5063

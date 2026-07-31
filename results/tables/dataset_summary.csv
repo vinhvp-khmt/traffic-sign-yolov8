@@ -1,0 +1,2 @@
+dataset,task,n_classes,total_images_scanned,total_valid_objects,n_train_images,n_valid_images,n_test_images,background_image_ratio,missing_label_files,invalid_objects,malformed_label_lines,dominant_class,dominant_class_instances,rarest_nonzero_class,rarest_class_instances
+pkdarabi/cardetection,traffic sign & traffic light object detection,15,4969,6012,3530,801,638,0.0008049909438518816,0,0,0,Red Light,787,Speed Limit 10,22

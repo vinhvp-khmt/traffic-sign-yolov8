@@ -1,0 +1,2 @@
+base_model,fallback_model,stage1_imgsz,stage1_batch,stage1_epochs,stage1_lr0,stage2_imgsz,stage2_batch,stage2_epochs,stage2_lr0,optimizer,cos_lr,fliplr,flipud,box,cls,dfl,patience,params_million,gflops,ultralytics,device,inference_ms_per_image
+yolov8s.pt,yolov8n.pt,640,16,60,0.001,768,10,35,0.0003,AdamW,True,0.0,0.0,7.5,0.7,1.5,15,11.13,28.5,8.4.95,Tesla T4,14.7

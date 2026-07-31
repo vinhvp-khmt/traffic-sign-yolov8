@@ -1,0 +1,145 @@
+\begin{thebibliography}{10}
+
+\bibitem{datacentric}
+A.~Ng, ``A chat with andrew on {MLOps}: From model-centric to data-centric
+  {AI}.'' DeepLearning.AI, 2021.
+
+\bibitem{yolov8}
+G.~Jocher, A.~Chaurasia, and J.~Qiu, ``Ultralytics {YOLOv8}.''
+  \url{https://github.com/ultralytics/ultralytics}, 2023.
+\newblock Phiên bản 8.4.95.
+
+\bibitem{mannwhitney}
+H.~B. Mann and D.~R. Whitney, ``On a test of whether one of two random
+  variables is stochastically larger than the other,'' {\em The Annals of
+  Mathematical Statistics}, vol.~18, no.~1, pp.~50--60, 1947.
+
+\bibitem{spearman}
+C.~Spearman, ``The proof and measurement of association between two things,''
+  {\em The American Journal of Psychology}, vol.~15, no.~1, pp.~72--101, 1904.
+
+\bibitem{coco}
+T.-Y. Lin, M.~Maire, S.~Belongie, J.~Hays, P.~Perona, D.~Ramanan,
+  P.~Doll{\'a}r, and C.~L. Zitnick, ``Microsoft {COCO}: Common objects in
+  context,'' in {\em European Conference on Computer Vision (ECCV)},
+  pp.~740--755, 2014.
+
+\bibitem{redmon2016yolo}
+J.~Redmon, S.~Divvala, R.~Girshick, and A.~Farhadi, ``You only look once:
+  Unified, real-time object detection,'' in {\em IEEE Conference on Computer
+  Vision and Pattern Recognition (CVPR)}, pp.~779--788, 2016.
+
+\bibitem{redmon2017yolo9000}
+J.~Redmon and A.~Farhadi, ``{YOLO9000}: Better, faster, stronger,'' in {\em
+  IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  pp.~7263--7271, 2017.
+
+\bibitem{redmon2018yolov3}
+J.~Redmon and A.~Farhadi, ``{YOLOv3}: An incremental improvement,'' {\em arXiv
+  preprint arXiv:1804.02767}, 2018.
+
+\bibitem{bochkovskiy2020yolov4}
+A.~Bochkovskiy, C.-Y. Wang, and H.-Y.~M. Liao, ``{YOLOv4}: Optimal speed and
+  accuracy of object detection,'' {\em arXiv preprint arXiv:2004.10934}, 2020.
+
+\bibitem{ren2015fasterrcnn}
+S.~Ren, K.~He, R.~Girshick, and J.~Sun, ``Faster {R-CNN}: Towards real-time
+  object detection with region proposal networks,'' in {\em Advances in Neural
+  Information Processing Systems (NeurIPS)}, 2015.
+
+\bibitem{liu2016ssd}
+W.~Liu, D.~Anguelov, D.~Erhan, C.~Szegedy, S.~Reed, C.-Y. Fu, and A.~C. Berg,
+  ``{SSD}: Single shot multibox detector,'' in {\em European Conference on
+  Computer Vision (ECCV)}, pp.~21--37, 2016.
+
+\bibitem{lin2017focal}
+T.-Y. Lin, P.~Goyal, R.~Girshick, K.~He, and P.~Doll{\'a}r, ``Focal loss for
+  dense object detection,'' in {\em IEEE International Conference on Computer
+  Vision (ICCV)}, pp.~2980--2988, 2017.
+
+\bibitem{he2016resnet}
+K.~He, X.~Zhang, S.~Ren, and J.~Sun, ``Deep residual learning for image
+  recognition,'' in {\em IEEE Conference on Computer Vision and Pattern
+  Recognition (CVPR)}, pp.~770--778, 2016.
+
+\bibitem{everingham2010voc}
+M.~Everingham, L.~Van~Gool, C.~K.~I. Williams, J.~Winn, and A.~Zisserman, ``The
+  {PASCAL} visual object classes ({VOC}) challenge,'' {\em International
+  Journal of Computer Vision}, vol.~88, no.~2, pp.~303--338, 2010.
+
+\bibitem{padilla2021metrics}
+R.~Padilla, W.~L. Passos, T.~L.~B. Dias, S.~L. Netto, and E.~A.~B. da~Silva,
+  ``A comparative analysis of object detection metrics with a companion
+  open-source toolkit,'' {\em Electronics}, vol.~10, no.~3, p.~279, 2021.
+
+\bibitem{stallkamp2011gtsrb}
+J.~Stallkamp, M.~Schlipsing, J.~Salmen, and C.~Igel, ``The {German} traffic
+  sign recognition benchmark: A multi-class classification competition,'' in
+  {\em International Joint Conference on Neural Networks (IJCNN)},
+  pp.~1453--1460, 2011.
+
+\bibitem{houben2013gtsdb}
+S.~Houben, J.~Stallkamp, J.~Salmen, M.~Schlipsing, and C.~Igel, ``Detection of
+  traffic signs in real-world images: The {German} traffic sign detection
+  benchmark,'' in {\em International Joint Conference on Neural Networks
+  (IJCNN)}, 2013.
+
+\bibitem{cardetection}
+pkdarabi, ``Car detection / traffic signs dataset.''
+  \url{https://www.kaggle.com/datasets/pkdarabi/cardetection}, 2023.
+
+\bibitem{notebook}
+tudeptraine, ``traffic-yolo-v2-run --- kaggle notebook.''
+  \url{https://www.kaggle.com/code/tudeptraine/traffic-yolo-v2-run}, 2026.
+
+\bibitem{northcutt2021labelerrors}
+C.~G. Northcutt, A.~Athalye, and J.~Mueller, ``Pervasive label errors in test
+  sets destabilize machine learning benchmarks,'' in {\em NeurIPS Datasets and
+  Benchmarks Track}, 2021.
+
+\bibitem{kaufman2012leakage}
+S.~Kaufman, S.~Rosset, C.~Perlich, and O.~Stitelman, ``Leakage in data mining:
+  Formulation, detection, and avoidance,'' {\em ACM Transactions on Knowledge
+  Discovery from Data (TKDD)}, vol.~6, no.~4, pp.~1--21, 2012.
+
+\bibitem{barz2020duplicates}
+B.~Barz and J.~Denzler, ``Do we train on test data? purging {CIFAR} of
+  near-duplicates,'' {\em Journal of Imaging}, vol.~6, no.~6, p.~41, 2020.
+
+\bibitem{zauner2010phash}
+C.~Zauner, ``Implementation and benchmarking of perceptual image hash
+  functions,'' tech. rep., Upper Austria University of Applied Sciences,
+  Hagenberg, 2010.
+
+\bibitem{buda2018imbalance}
+M.~Buda, A.~Maki, and M.~A. Mazurowski, ``A systematic study of the class
+  imbalance problem in convolutional neural networks,'' {\em Neural Networks},
+  vol.~106, pp.~249--259, 2018.
+
+\bibitem{johnson2019imbalance}
+J.~M. Johnson and T.~M. Khoshgoftaar, ``Survey on deep learning with class
+  imbalance,'' {\em Journal of Big Data}, vol.~6, no.~1, pp.~1--54, 2019.
+
+\bibitem{shannon1948entropy}
+C.~E. Shannon, ``A mathematical theory of communication,'' {\em The Bell System
+  Technical Journal}, vol.~27, no.~3, pp.~379--423, 1948.
+
+\bibitem{pedregosa2011sklearn}
+F.~Pedregosa, G.~Varoquaux, A.~Gramfort, {\em et~al.}, ``Scikit-learn: Machine
+  learning in {Python},'' {\em Journal of Machine Learning Research}, vol.~12,
+  pp.~2825--2830, 2011.
+
+\bibitem{harris2020numpy}
+C.~R. Harris, K.~J. Millman, S.~J. van~der Walt, {\em et~al.}, ``Array
+  programming with {NumPy},'' {\em Nature}, vol.~585, pp.~357--362, 2020.
+
+\bibitem{virtanen2020scipy}
+P.~Virtanen, R.~Gommers, T.~E. Oliphant, {\em et~al.}, ``{SciPy 1.0}:
+  Fundamental algorithms for scientific computing in {Python},'' {\em Nature
+  Methods}, vol.~17, pp.~261--272, 2020.
+
+\bibitem{hunter2007matplotlib}
+J.~D. Hunter, ``Matplotlib: A 2d graphics environment,'' {\em Computing in
+  Science \& Engineering}, vol.~9, no.~3, pp.~90--95, 2007.
+
+\end{thebibliography}

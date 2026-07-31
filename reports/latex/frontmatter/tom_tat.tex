@@ -1,0 +1,41 @@
+% ================= TÓM TẮT =================
+\newpage
+\thispagestyle{plain}
+
+\begin{center}
+    {\bfseries\Large TÓM TẮT}
+\end{center}
+
+\vspace{1cm}
+
+Phát hiện biển báo và đèn tín hiệu giao thông là bài toán nền tảng của hệ hỗ trợ lái. Với các
+kiến trúc hiện đại như YOLOv8, độ chính xác trên các bộ dữ liệu chuẩn đã rất cao; khi con số
+tổng đã bão hoà, câu hỏi có giá trị không còn là ``mô hình nào tốt hơn'' mà là ``con số đó có
+đáng tin và đồng đều không''. Đề tài thực hiện một \textbf{phân tích thứ cấp mang tính kiểm định}
+trên kết quả của một notebook Kaggle huấn luyện bộ phát hiện YOLOv8s trên bộ dữ liệu
+\texttt{pkdarabi/cardetection}.
+
+Bộ dữ liệu gồm 15 lớp (2 lớp đèn tín hiệu, 12 lớp giới hạn tốc độ và lớp Stop), tổng cộng
+4.969 ảnh và 6.012 đối tượng, nhãn rất sạch. Mô hình đã huấn luyện được coi là \textbf{công cụ
+đo cố định}: chúng tôi không huấn luyện lại mà trích toàn bộ kết quả notebook thành bảng chuẩn,
+rồi tính các chỉ số kiểm định và kiểm định thống kê để trả lời ba câu hỏi về độ tin cậy của
+mAP@0,5 = 0,970 được báo cáo.
+
+Ba phát hiện chính. Thứ nhất, về \textbf{rò rỉ dữ liệu}: chính bước EDA phát hiện 202 ảnh trùng
+chính xác và 423 ảnh gần trùng xuyên split, nhưng quy trình chỉ loại 91 ảnh khỏi tập huấn luyện,
+còn tập kiểm thử dùng để chấm điểm không được khử trùng, khiến mAP có thể lạc quan. Thứ hai, về
+\textbf{khoảng cách đèn--biển}: hai lớp đèn tín hiệu chỉ đạt mAP@0,5:0,95 = 0,541 so với 0,854
+của 13 lớp biển báo (chênh 0,313; kiểm định Mann--Whitney một phía cho $p = 0{,}0095$). Thứ ba,
+về nguyên nhân: độ hiếm của lớp \textbf{không} giải thích được khoảng cách này (tương quan
+Spearman $\rho = 0{,}032$, $p = 0{,}91$); trái lại, hai lớp có nhiều đối tượng nhất trên tập test
+lại rơi đúng vào nhóm kém nhất.
+
+Kết luận, con số 0,97 vừa có thể được nâng đỡ bởi rò rỉ dữ liệu, vừa che giấu sự phân hoá lớn
+giữa các lớp, mà sự phân hoá đó bắt nguồn từ \textbf{loại vật thể} (đèn tín hiệu nhỏ, độ tương
+phản thấp, hai màu đỏ/xanh dễ nhầm) chứ không phải từ mất cân bằng lớp. Đây là góc nhìn kiểm định
+mà một báo cáo chỉ nêu mAP tổng sẽ bỏ sót. Đóng góp kèm theo gồm pipeline phân tích tái lập, ứng
+dụng web trình bày kết quả, cùng báo cáo và slide.
+
+\vspace{0.5cm}
+\noindent\textbf{Từ khoá:} kiểm định độ tin cậy, YOLOv8, phát hiện biển báo, rò rỉ dữ liệu,
+mất cân bằng lớp, mAP theo lớp, đèn tín hiệu.

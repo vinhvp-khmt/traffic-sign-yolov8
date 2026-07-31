@@ -1,0 +1,4 @@
+split,n_images,n_objects,objects_per_image_mean,bbox_area_ratio_median,bbox_area_px_median,n_background_images
+train,3530,4298,1.217564,0.050865,8802.5,3
+valid,801,944,1.178527,0.132493,22928.0,0
+test,638,770,1.206897,0.049303,8532.125,1

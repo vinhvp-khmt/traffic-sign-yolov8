@@ -1,0 +1,4 @@
+input_policy,instances,min_side_median_px,min_side_p10_px,ratio_min_side_lt_4px,ratio_min_side_lt_8px,ratio_min_side_lt_16px,ratio_min_side_ge_32px
+Letterbox 640,6012,125.384615,7.692308,0.033766,0.108949,0.207917,0.707585
+Letterbox 1024,6012,200.615385,12.307308,0.007651,0.049734,0.132568,0.760978
+Short-side 800 / max 1333,6012,156.730769,9.615385,0.020792,0.080838,0.173819,0.731371

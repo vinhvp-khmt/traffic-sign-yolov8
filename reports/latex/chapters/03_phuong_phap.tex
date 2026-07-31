@@ -1,0 +1,70 @@
+\chapter{Dữ liệu và phương pháp}
+\label{ch:phuongphap}
+
+\section{Bộ dữ liệu pkdarabi/cardetection}
+
+Bộ dữ liệu gồm 15 lớp: hai lớp đèn tín hiệu (Green Light, Red Light), mười hai lớp biển giới hạn
+tốc độ và lớp Stop. Tổng cộng 4.969 ảnh và 6.012 đối tượng hợp lệ, chia sẵn thành ba tập như
+Bảng~\ref{tab:split}.
+
+\begin{table}[H]
+\centering
+\caption{Thống kê theo split}
+\label{tab:split}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Split} & \textbf{Số ảnh} & \textbf{Số đối tượng} & \textbf{Đối tượng/ảnh (TB)}
+& \textbf{Diện tích bbox (px, median)} \\
+\midrule
+train & 3.530 & 4.298 & 1,22 & 8.802 \\
+valid &   801 &   944 & 1,18 & 22.928 \\
+test  &   638 &   770 & 1,21 & 8.532 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Chất lượng nhãn rất sạch: 0 file nhãn thiếu, 0 đối tượng không hợp lệ, 0 dòng nhãn sai định dạng.
+Lớp phổ biến nhất là Red Light (787 đối tượng), hiếm nhất là Speed Limit 10 (22 đối tượng).
+
+\subsection{Hạn chế về tính đại diện}
+
+Dữ liệu là ảnh cắt kích thước chuẩn hoá (median $416\times416$), thu từ nhiều nguồn video/camera
+(có cả FisheyeCamera). Kết luận của đề tài giới hạn ở phạm vi bộ dữ liệu này và ở \emph{hành vi
+của mô hình đã huấn luyện}, không khái quát cho mọi điều kiện đường thực tế.
+
+\section{Công cụ đo --- YOLOv8s huấn luyện hướng-EDA}
+
+Notebook nguồn suy ra cấu hình huấn luyện từ kết quả EDA rồi huấn luyện hai giai đoạn trên GPU
+Tesla T4 (Ultralytics 8.4.95):
+
+\begin{itemize}
+  \item Mô hình nền \texttt{yolov8s.pt} (11,13 triệu tham số, 28,5 GFLOPs); dự phòng
+  \texttt{yolov8n.pt} khi thiếu bộ nhớ.
+  \item Giai đoạn 1: \texttt{imgsz=640}, batch 16, tối đa 60 epoch, \texttt{lr0=0,001}.
+  \item Giai đoạn 2: \texttt{imgsz=768}, batch 10, tối đa 35 epoch, \texttt{lr0=0,0003}.
+  \item Tối ưu AdamW + cosine LR; \textbf{không} lật ngang/dọc vì lật làm sai ngữ nghĩa biển báo
+  có hướng.
+\end{itemize}
+
+Trọng số đã huấn luyện (\texttt{best.pt}) được đính kèm trong thư mục \texttt{models/} của đề
+tài, phục vụ ứng dụng demo và việc kiểm chứng.
+
+\section{Phương pháp phân tích thứ cấp}
+
+Quy trình gồm ba bước, đều tự động và tái lập:
+
+\begin{enumerate}
+  \item \textbf{Trích xuất} (\texttt{src/extract\_notebook\_results.py}): đọc lại toàn bộ con số
+  đã in trong notebook, cố định thành các bảng CSV chuẩn trong \texttt{results/tables/}. Không có
+  giá trị nào nhập tay.
+  \item \textbf{Kiểm định} (\texttt{src/audit\_analysis.py}): tính phơi nhiễm rò rỉ, khoảng cách
+  đèn--biển (Mann--Whitney), và tương quan độ hiếm--hiệu năng (Spearman).
+  \item \textbf{Trực quan hoá} (\texttt{src/make\_figures.py}): sinh hình từ bảng đã trích.
+\end{enumerate}
+
+\section{Chỉ số và kiểm định}
+
+Hiệu năng đo bằng Precision, Recall, mAP@0,5 và mAP@0,5:0,95 (theo Ultralytics). Khoảng cách giữa
+hai nhóm lớp kiểm định bằng Mann--Whitney U một phía; liên hệ độ hiếm--hiệu năng đo bằng tương
+quan Spearman. Mọi bước cố định hạt giống \texttt{seed=42}.

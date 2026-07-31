@@ -1,0 +1,62 @@
+\chapter{Giới thiệu}
+\label{ch:gioithieu}
+
+\section{Bối cảnh và động cơ}
+
+Phát hiện biển báo và đèn tín hiệu giao thông là bài toán nền tảng của hệ hỗ trợ lái và xe tự
+hành. Với các kiến trúc hiện đại như YOLOv8, độ chính xác trên các bộ dữ liệu chuẩn đã rất cao:
+notebook nguồn của đề tài đạt mAP@0,5 = 0,970 trên tập kiểm thử. Khi con số tổng đã bão hoà, câu
+hỏi có giá trị khoa học không còn là ``mô hình nào tốt hơn'' mà là ``con số đó có \emph{đáng tin}
+và \emph{đồng đều} không''.
+
+\section{Định vị đề tài --- hai hướng tiếp cận}
+
+Có hai hướng tiếp cận khi làm việc với một bài toán học máy đã có kết quả tốt. Hướng
+\emph{model-centric} tập trung cải tiến mô hình để đẩy chỉ số lên cao hơn. Hướng
+\emph{data-centric} \cite{datacentric} lại xem chất lượng và cấu trúc dữ liệu là đối tượng
+nghiên cứu, và đặt câu hỏi về \emph{độ tin cậy} của chính con số đã đạt được. Đề tài này đi theo
+hướng data-centric, như trình bày ở Bảng~\ref{tab:phanbiet}.
+
+\begin{table}[H]
+\centering
+\caption{Hai hướng tiếp cận với một bộ phát hiện đã huấn luyện}
+\label{tab:phanbiet}
+\small
+\begin{tabularx}{\linewidth}{@{}p{3.0cm}XX@{}}
+\toprule
+ & \textbf{Hướng model-centric} & \textbf{Hướng data-centric (đề tài này)} \\
+\midrule
+Câu hỏi & Mô hình nào phát hiện tốt hơn? & mAP 0,97 có đáng tin và đồng đều không? \\
+Vai trò mô hình & Đối tượng nghiên cứu --- huấn luyện, so sánh & Công cụ đo cố định --- chỉ phân
+tích lại kết quả \\
+Đầu ra & Bảng benchmark, mAP tổng & Bằng chứng thống kê về độ tin cậy và phân hoá lớp \\
+Phương pháp & Thiết kế, huấn luyện mạng & Kiểm định thống kê, phân tích rò rỉ và phân hoá \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Mô hình YOLOv8s đã huấn luyện được xem là công cụ đo cố định; đề tài chạy ở chế độ
+\textit{results-only} --- không huấn luyện lại mà phân tích lại các kết quả nó sinh ra. Trọng số
+YOLOv8 đã huấn luyện (\texttt{best.pt}) được đính kèm trong thư mục \texttt{models/} của đề tài
+để phục vụ ứng dụng demo và tái lập.
+
+\section{Câu hỏi nghiên cứu}
+
+\begin{itemize}[leftmargin=1.4cm,label=]
+  \item \textbf{CH-A.} Mức độ rò rỉ dữ liệu xuyên split là bao nhiêu, và nó ảnh hưởng thế nào tới
+  độ tin cậy của mAP?
+  \item \textbf{CH-B.} Hiệu năng có đồng đều giữa các lớp không? Nếu không, khoảng cách lớn nhất
+  nằm ở đâu?
+  \item \textbf{CH-C.} Khoảng cách đó do độ hiếm của lớp (mất cân bằng) hay do bản chất vật thể?
+\end{itemize}
+
+\section{Đóng góp}
+
+\begin{itemize}
+  \item Định lượng phơi nhiễm rò rỉ dữ liệu và chỉ ra khoảng trống trong quy trình khử trùng của
+  notebook nguồn.
+  \item Chứng minh bằng kiểm định thống kê rằng đèn tín hiệu kém hơn biển báo một cách có ý nghĩa.
+  \item Bác bỏ giả thuyết ``mất cân bằng gây ra thất bại'' bằng bằng chứng tương quan, chuyển
+  nguyên nhân sang loại vật thể.
+  \item Cung cấp pipeline tái lập, ứng dụng web, báo cáo Word/LaTeX và slide trình bày.
+\end{itemize}

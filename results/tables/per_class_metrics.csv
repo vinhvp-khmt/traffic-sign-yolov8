@@ -1,0 +1,16 @@
+class_id,class_name,test_images,test_instances,precision,recall,ap50,ap50_95,is_traffic_light,category
+14,Stop,50,50,0.998511,1.0,0.995,0.899068,False,Biển báo
+12,Speed Limit 80,60,61,0.976662,1.0,0.995,0.877975,False,Biển báo
+3,Speed Limit 100,45,46,0.967628,1.0,0.994149,0.870534,False,Biển báo
+11,Speed Limit 70,52,53,0.921754,0.943396,0.973431,0.867052,False,Biển báo
+6,Speed Limit 20,46,46,0.971896,0.978261,0.973261,0.866319,False,Biển báo
+5,Speed Limit 120,40,44,0.930134,1.0,0.985494,0.863016,False,Biển báo
+7,Speed Limit 30,60,60,0.983039,0.966005,0.983833,0.860135,False,Biển báo
+10,Speed Limit 60,45,45,1.0,0.932761,0.991676,0.858572,False,Biển báo
+9,Speed Limit 50,47,50,0.92757,0.96,0.987289,0.856111,False,Biển báo
+8,Speed Limit 40,51,53,0.976522,0.962264,0.981858,0.838153,False,Biển báo
+2,Speed Limit 10,2,3,1.0,0.970734,0.995,0.8295,False,Biển báo
+13,Speed Limit 90,33,34,0.995382,0.970588,0.992895,0.827129,False,Biển báo
+4,Speed Limit 110,21,21,0.906076,0.904762,0.929527,0.784466,False,Biển báo
+0,Green Light,77,110,0.96203,0.921345,0.9503,0.575613,True,Đèn tín hiệu
+1,Red Light,71,94,0.887156,0.755319,0.825229,0.506292,True,Đèn tín hiệu

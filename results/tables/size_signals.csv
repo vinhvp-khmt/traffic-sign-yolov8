@@ -1,0 +1,2 @@
+coco_small_object_ratio,relative_tiny_object_ratio,tiny_ratio_area_lt_0_1pct,small_ratio_area_lt_1pct,border_touch_ratio,yolo640_min_side_lt_8px_ratio,hires800_min_side_lt_8px_ratio
+0.31370592149035265,0.1763140385894877,0.18683108422522104,0.3657515123313169,0.021457085828343315,0.10894876912840985,0.08083832335329341

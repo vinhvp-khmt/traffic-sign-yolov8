@@ -1,0 +1,5 @@
+split,total_instances,classes_with_instances,max_class_count,min_positive_class_count,imbalance_ratio,coef_variation,normalized_entropy,gini
+overall,6012,15,787,22,35.772727,0.474358,0.952828,0.246707
+train,4298,15,585,19,30.789474,0.479729,0.952752,0.249977
+valid,944,14,122,17,7.176471,0.47512,0.946619,0.258898
+test,770,15,110,3,36.666667,0.481063,0.953365,0.247273

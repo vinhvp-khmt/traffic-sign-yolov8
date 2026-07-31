@@ -1,0 +1,61 @@
+\chapter*{PHỤ LỤC}
+\addcontentsline{toc}{chapter}{PHỤ LỤC}
+\markboth{PHỤ LỤC}{}
+
+Phụ lục liệt kê toàn bộ tài nguyên công khai phục vụ việc tái lập (reproducibility) kết quả đề
+tài. Tất cả các URL dưới đây có thể truy cập công khai tại thời điểm nộp đề tài.
+
+\section*{Phụ lục A: Mã nguồn (GitHub)}
+\addcontentsline{toc}{section}{Phụ lục A: Mã nguồn (GitHub)}
+\label{app:github}
+
+\begin{itemize}[leftmargin=1.5cm]
+\item \textbf{Thư mục dự án:} \texttt{data-analysis/traffic-yolo-analysis/}
+\item \textbf{Cấu trúc thư mục quan trọng:}
+\begin{itemize}
+\item \texttt{data/notebook/} --- notebook Kaggle nguồn (\texttt{traffic-yolo-v2-run.ipynb})
+\item \texttt{src/} --- mã trích xuất, phân tích kiểm định, vẽ hình
+\item \texttt{results/tables/} --- bảng CSV trích từ output notebook
+\item \texttt{results/figs/} --- hình sinh tự động
+\item \texttt{app/app.py} --- ứng dụng web Streamlit
+\item \texttt{tests/} --- kiểm thử tự động (pytest)
+\item \texttt{reports/} --- báo cáo Word, LaTeX và slide
+\end{itemize}
+\end{itemize}
+
+\section*{Phụ lục B: Bộ dữ liệu}
+\addcontentsline{toc}{section}{Phụ lục B: Bộ dữ liệu}
+\label{app:dataset}
+
+\begin{itemize}[leftmargin=1.5cm]
+\item \textbf{Bộ dữ liệu:} \url{https://www.kaggle.com/datasets/pkdarabi/cardetection}
+\begin{itemize}
+\item Quy mô: 4.969 ảnh, 6.012 đối tượng, 15 lớp (đèn tín hiệu + biển báo).
+\item Notebook nguồn: \url{https://www.kaggle.com/code/tudeptraine/traffic-yolo-v2-run}
+\item Ngày truy cập: tháng 7/2026.
+\end{itemize}
+\end{itemize}
+
+\section*{Phụ lục C: Hướng dẫn tái lập}
+\addcontentsline{toc}{section}{Phụ lục C: Hướng dẫn tái lập}
+\label{app:repro}
+
+\begin{lstlisting}[language=bash,caption={Các bước tái lập kết quả}]
+# 1. Cai dat moi truong
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+
+# 2. Chay toan bo pipeline phan tich thu cap
+#    (trich xuat -> kiem dinh -> ve hinh)
+python -m src.run_pipeline
+
+# 3. Kiem thu tu dong
+pytest
+
+# 4. Mo ung dung web
+streamlit run app/app.py
+\end{lstlisting}
+
+\textbf{Môi trường:} Python 3, các thư viện \texttt{pandas}, \texttt{scipy}, \texttt{matplotlib};
+hạt giống ngẫu nhiên \texttt{seed=42}. Số liệu gốc do notebook Kaggle sinh trên GPU Tesla T4
+(Ultralytics 8.4.95). Phân tích thứ cấp chạy hoàn toàn trên CPU.

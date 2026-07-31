@@ -1,0 +1,48 @@
+\chapter{Cơ sở lý thuyết}
+\label{ch:cosoly}
+
+\section{Bài toán phát hiện đối tượng và chỉ số đánh giá}
+
+Phát hiện đối tượng vừa định vị (bounding box) vừa phân loại vật thể. Chỉ số chuẩn là
+\textbf{mean Average Precision} (mAP): trung bình của Average Precision trên các lớp. Hai biến
+thể thường dùng là mAP@0,5 (ngưỡng IoU 0,5) và mAP@0,5:0,95 (trung bình trên 10 ngưỡng IoU từ
+0,5 đến 0,95, nghiêm ngặt hơn về độ khớp hộp). Precision và Recall bổ sung góc nhìn về tỉ lệ dự
+đoán đúng và tỉ lệ bỏ sót.
+
+\section{YOLOv8 như một công cụ đo}
+
+YOLOv8 \cite{yolov8} là mô hình phát hiện một giai đoạn, dự đoán trực tiếp hộp và lớp trên lưới
+đặc trưng đa tỉ lệ. Trong đề tài này, một YOLOv8s đã huấn luyện được coi là \emph{công cụ đo cố
+định}: ta không quan tâm cải tiến kiến trúc, mà dùng chính các lỗi và điểm số nó sinh ra làm dữ
+liệu để phân tích độ tin cậy.
+
+\section{Rò rỉ dữ liệu và trùng lặp}
+
+Rò rỉ dữ liệu (\textit{data leakage}) xảy ra khi thông tin của tập kiểm thử ``lọt'' vào quá
+trình huấn luyện. Với dữ liệu ảnh cắt từ video, một dạng data leakage phổ biến là \textbf{ảnh trùng
+hoặc gần trùng xuất hiện ở nhiều split}. Perceptual hash (perceptual hash, ví dụ dHash) cho phép
+phát hiện ảnh gần trùng: hai ảnh có mã băm giống hoặc rất gần nhau về khoảng cách Hamming được
+coi là trùng tri giác. Nếu không loại trùng ở tập đánh giá, mô hình có thể ``ghi nhớ'' ảnh đã
+thấy lúc huấn luyện, làm mAP cao hơn hiệu năng thực.
+
+\section{Đo mất cân bằng lớp}
+
+Ba thước đo bổ sung cho nhau được dùng: \emph{imbalance ratio} (tỉ số lớp nhiều nhất trên lớp ít
+nhất), \emph{entropy chuẩn hoá} (bằng 1 khi phân bố đều) và \emph{hệ số Gini} về bất bình đẳng
+(0 = cân bằng hoàn toàn; càng lớn càng tập trung). Cần phân biệt hệ số Gini bất bình đẳng với
+Gini impurity trong cây quyết định --- đây là hai khái niệm khác nhau.
+
+\section{Kiểm định thống kê sử dụng}
+
+\textbf{Kiểm định Mann--Whitney U} \cite{mannwhitney} là kiểm định phi tham số so sánh phân phối
+của hai nhóm độc lập mà không giả định phân phối chuẩn --- phù hợp khi so hiệu năng nhóm đèn (2
+lớp) với nhóm biển (13 lớp). \textbf{Tương quan hạng Spearman} $\rho$ \cite{spearman} đo mức độ
+đơn điệu giữa hai biến; ta dùng nó
+để kiểm tra số lượng đối tượng của một lớp (độ hiếm) có liên hệ đơn điệu với hiệu năng lớp đó
+hay không. Giá trị $\rho$ gần 0 với $p$ lớn nghĩa là không có tương quan.
+
+\section{Định nghĩa kích thước vật thể}
+
+Theo quy ước COCO \cite{coco}, vật thể được xếp \emph{small} nếu diện tích nhỏ hơn $32\times32$
+px. Vật thể nhỏ khó phát hiện vì ít điểm ảnh mang thông tin; tỉ lệ vật thể nhỏ cao là một tín
+hiệu khó khăn cho detector, đặc biệt ở độ phân giải đầu vào thấp.

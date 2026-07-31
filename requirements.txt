@@ -1,0 +1,10 @@
+pandas
+numpy
+scipy
+matplotlib
+streamlit
+pytest
+# Cho tab "Demo phát hiện" (tuỳ chọn — app vẫn chạy nếu thiếu, sẽ hiện ảnh demo kết xuất sẵn)
+ultralytics
+opencv-python-headless
+pillow

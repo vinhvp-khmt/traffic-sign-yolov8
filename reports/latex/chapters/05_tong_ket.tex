@@ -1,0 +1,43 @@
+\chapter{Tổng kết}
+\label{ch:tongket}
+
+\section{Tổng hợp phát hiện}
+
+Cả ba câu hỏi kiểm định đều chỉ về một hướng: con số mAP 0,97 cần được nhìn thận trọng hơn.
+Nó có thể được data leakage nâng đỡ (CH-A), đồng thời che lấp chênh lệch lớn giữa các lớp
+(CH-B), và chênh lệch đó bắt nguồn từ loại vật thể chứ không phải mất cân bằng (CH-C).
+
+\begin{itemize}
+  \item \textbf{CH-A --- Rò rỉ:} 202 ảnh trùng chính xác và 423 ảnh gần trùng xuyên split chưa
+  được khử ở tập đánh giá.
+  \item \textbf{CH-B --- Khoảng cách:} đèn 0,541 so với biển 0,854 (chênh 0,313; $p = 0{,}0095$).
+  \item \textbf{CH-C --- Nguyên nhân:} độ hiếm không liên quan ($\rho = 0{,}032$); lỗi tập trung
+  ở đèn tín hiệu.
+\end{itemize}
+
+\section{Khuyến nghị}
+
+\begin{itemize}
+  \item Khử trùng lặp xuyên split ở \emph{cả} tập valid/test trước khi báo cáo mAP; báo cáo thêm
+  mAP sau khi loại near-duplicate để thấy mức chênh.
+  \item Báo cáo AP theo từng lớp và theo nhóm (đèn/biển) thay vì chỉ mAP tổng, để không che giấu
+  điểm yếu.
+  \item Cải thiện lớp đèn tín hiệu: tăng độ phân giải đầu vào (\texttt{imgsz} 896/1024), bổ sung
+  mẫu đèn khó, và phân tích ma trận nhầm lẫn đỏ$\leftrightarrow$xanh.
+  \item Không dựa vào oversampling lớp hiếm để sửa lỗi đèn, vì độ hiếm không phải nguyên nhân.
+\end{itemize}
+
+\section{Hạn chế}
+
+Đề tài ở chế độ \textit{results-only} nên không chạy lại mô hình sau khi khử rò rỉ để đo trực
+tiếp mức sụt mAP; kết luận về ảnh hưởng của rò rỉ mang tính định lượng phơi nhiễm, không phải đo
+can thiệp. Nhóm đèn chỉ có hai lớp nên kiểm định thống kê tuy có ý nghĩa vẫn cần thận trọng khi
+khái quát.
+
+\section{Sản phẩm kèm theo}
+
+\begin{itemize}
+  \item Pipeline phân tích tái lập (\texttt{src/}) kèm kiểm thử tự động (\texttt{pytest}, 6/6 đạt).
+  \item Ứng dụng web Streamlit (\texttt{app/app.py}) trình bày toàn bộ phân tích.
+  \item Báo cáo Word (\texttt{.docx}), báo cáo LaTeX (mẫu trường) và slide trình bày.
+\end{itemize}

@@ -1,0 +1,4 @@
+ma,phat_hien,bang_chung,he_qua
+A,Rò rỉ xuyên split chưa được khử ở tập đánh giá,202 exact + 423 near-dup xuyên split; chỉ loại 91 khỏi train,"mAP 0,97 có thể lạc quan hơn hiệu năng thực"
+B,Đèn tín hiệu kém hơn biển báo rõ rệt,mAP@.5:.95: đèn 0.541 vs biển 0.854; Mann–Whitney p=0.00952,"Hiệu năng tổng thể bị chi phối bởi loại vật thể, không đồng đều"
+C,Độ hiếm KHÔNG giải thích được khoảng cách,"Spearman(instance, mAP)=0.0322 (p=0.91); Red Light phổ biến nhất nhưng kém nhất","Nguyên nhân là bản chất vật thể (đèn nhỏ, đỏ/xanh dễ nhầm), không phải mất cân bằng"

@@ -274,9 +274,11 @@ with tab_analysis:
 with tab_demo:
     st.subheader("🎬 Mô phỏng ứng dụng — YOLOv8 gắn với độ tin cậy đã kiểm định")
     st.markdown(
-        "Tải một ảnh giao thông (hoặc chọn ảnh mẫu). Mô hình YOLOv8 đã huấn luyện sẽ vẽ hộp; "
-        "với **mỗi** phát hiện, demo đối chiếu **độ tin cậy đã kiểm định** của lớp đó. Nếu là lớp "
-        "đèn tín hiệu (mAP thấp), demo **cảnh báo** — đúng câu chuyện kiểm định của đề tài.")
+        "Tải một ảnh giao thông, chọn ảnh mẫu, hoặc tải video ngắn để mô phỏng phát hiện. "
+        "Mô hình YOLOv8 đã huấn luyện sẽ vẽ hộp trên ảnh hoặc từng khung hình video; với "
+        "**mỗi** phát hiện, ứng dụng đối chiếu **độ tin cậy đã kiểm định** của lớp đó. Nếu là "
+        "lớp đèn tín hiệu (mAP thấp), ứng dụng **cảnh báo** — đúng câu chuyện kiểm định của "
+        "đề tài.")
 
     import numpy as np
     try:

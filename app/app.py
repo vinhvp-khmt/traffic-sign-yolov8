@@ -7,6 +7,8 @@ Dashboard trình bày phân tích thứ cấp trên kết quả notebook Kaggle:
 """
 from __future__ import annotations
 
+import shutil
+import subprocess
 import sys
 import uuid
 from pathlib import Path
@@ -59,9 +61,37 @@ def resize_frame(frame_bgr, cv2):
     h, w = frame_bgr.shape[:2]
     scale = min(1.0, VIDEO_MAX_SIDE / max(h, w))
     if scale == 1.0:
-        return frame_bgr
-    size = (int(w * scale), int(h * scale))
-    return cv2.resize(frame_bgr, size, interpolation=cv2.INTER_AREA)
+        resized = frame_bgr
+    else:
+        size = (int(w * scale), int(h * scale))
+        resized = cv2.resize(frame_bgr, size, interpolation=cv2.INTER_AREA)
+
+    h, w = resized.shape[:2]
+    even_h = h - (h % 2)
+    even_w = w - (w % 2)
+    return resized[:even_h, :even_w]
+
+
+def transcode_for_browser(source_path):
+    ffmpeg = shutil.which("ffmpeg")
+    if ffmpeg is None:
+        return source_path, False
+
+    output_path = source_path.with_name(f"{source_path.stem}_browser.mp4")
+    cmd = [
+        ffmpeg,
+        "-y",
+        "-i", str(source_path),
+        "-vcodec", "libx264",
+        "-pix_fmt", "yuv420p",
+        "-movflags", "+faststart",
+        "-an",
+        str(output_path),
+    ]
+    result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+    if result.returncode != 0 or not output_path.exists():
+        return source_path, False
+    return output_path, True
 
 
 def process_video(uploaded_video, detect, cv2):
@@ -121,12 +151,14 @@ def process_video(uploaded_video, detect, cv2):
 
     cap.release()
     writer.release()
+    playable_path, transcoded = transcode_for_browser(output_path)
     progress.empty()
     status.empty()
-    return output_path, {
+    return playable_path, {
         "Số khung hình": frame_index,
         "Tổng phát hiện": total_detections,
         "Khung hình có đèn tín hiệu": light_frames,
+        "Chuẩn phát web": "H.264" if transcoded else "MP4 gốc",
     }
 
 

@@ -8,6 +8,7 @@ Dashboard trình bày phân tích thứ cấp trên kết quả notebook Kaggle:
 from __future__ import annotations
 
 import sys
+import uuid
 from pathlib import Path
 
 import pandas as pd
@@ -25,6 +26,7 @@ st.set_page_config(page_title="Kiểm định YOLOv8 biển báo", layout="wide"
 DEFAULT_DEMO_CONF = 0.25
 FIGURE_WIDTH = 760
 DEMO_IMAGE_MAX_SIZE = (720, 460)
+VIDEO_MAX_SIDE = 720
 
 
 def table(name, **kw):
@@ -51,6 +53,81 @@ def fit_demo_image(image):
     out = Image.fromarray(image)
     out.thumbnail(DEMO_IMAGE_MAX_SIZE)
     return out
+
+
+def resize_frame(frame_bgr, cv2):
+    h, w = frame_bgr.shape[:2]
+    scale = min(1.0, VIDEO_MAX_SIDE / max(h, w))
+    if scale == 1.0:
+        return frame_bgr
+    size = (int(w * scale), int(h * scale))
+    return cv2.resize(frame_bgr, size, interpolation=cv2.INTER_AREA)
+
+
+def process_video(uploaded_video, detect, cv2):
+    cache_dir = REPO / ".cache" / "video_outputs"
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    token = uuid.uuid4().hex
+    suffix = Path(uploaded_video.name).suffix.lower() or ".mp4"
+    input_path = cache_dir / f"{token}_input{suffix}"
+    output_path = cache_dir / f"{token}_output.mp4"
+    input_path.write_bytes(uploaded_video.getbuffer())
+
+    cap = cv2.VideoCapture(str(input_path))
+    if not cap.isOpened():
+        raise RuntimeError("Không đọc được video đã tải lên.")
+
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    fps = fps if fps and fps > 0 else 24
+    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT) or 0)
+    ok, frame = cap.read()
+    if not ok:
+        cap.release()
+        raise RuntimeError("Video không có khung hình hợp lệ.")
+
+    frame = resize_frame(frame, cv2)
+    h, w = frame.shape[:2]
+    writer = cv2.VideoWriter(
+        str(output_path),
+        cv2.VideoWriter_fourcc(*"mp4v"),
+        fps,
+        (w, h),
+    )
+    if not writer.isOpened():
+        cap.release()
+        raise RuntimeError("Không tạo được video output.")
+
+    progress = st.progress(0, text="Đang xử lý video...")
+    status = st.empty()
+    frame_index = 0
+    total_detections = 0
+    light_frames = 0
+
+    while ok:
+        frame = resize_frame(frame, cv2)
+        out = detect(frame, conf=DEFAULT_DEMO_CONF)
+        annotated = out["image"]
+        detections = out["detections"]
+        total_detections += len(detections)
+        if any(d["Nhóm"] == "Đèn tín hiệu" for d in detections):
+            light_frames += 1
+
+        writer.write(cv2.cvtColor(annotated, cv2.COLOR_RGB2BGR))
+        frame_index += 1
+        if total_frames:
+            progress.progress(min(frame_index / total_frames, 1.0), text="Đang xử lý video...")
+        status.caption(f"Đã xử lý {frame_index:,} khung hình")
+        ok, frame = cap.read()
+
+    cap.release()
+    writer.release()
+    progress.empty()
+    status.empty()
+    return output_path, {
+        "Số khung hình": frame_index,
+        "Tổng phát hiện": total_detections,
+        "Khung hình có đèn tín hiệu": light_frames,
+    }
 
 
 st.title("🚦 Kiểm định độ tin cậy — YOLOv8 phát hiện biển báo (pkdarabi/cardetection)")
@@ -111,31 +188,31 @@ with tab_analysis:
     st.subheader("Hiệu năng theo lớp")
     fig("01_*.png")
 
-    st.subheader("A · Rò rỉ dữ liệu xuyên split")
-    st.markdown(
-        "Notebook tự phát hiện trùng lặp nhưng **chỉ loại 91 ảnh khỏi train**; "
-        "tập valid/test dùng để đánh giá **không** được khử trùng. Đây là nguồn khiến "
-        "mAP 0,97 có thể lạc quan hơn hiệu năng thực.")
-    fig("04_*.png")
-    table("audit_leakage_exposure.csv")
+    with st.expander("A · Rò rỉ dữ liệu xuyên split"):
+        st.markdown(
+            "Notebook tự phát hiện trùng lặp nhưng **chỉ loại 91 ảnh khỏi train**; "
+            "tập valid/test dùng để đánh giá **không** được khử trùng. Đây là nguồn khiến "
+            "mAP 0,97 có thể lạc quan hơn hiệu năng thực.")
+        fig("04_*.png")
+        table("audit_leakage_exposure.csv")
 
-    st.subheader("B · Khoảng cách đèn tín hiệu vs biển báo")
-    lvs = pd.read_csv(RESULTS_TABLES / "audit_light_vs_sign.csv")
-    gap = (lvs[lvs.category == "Biển báo"]["mean_map50_95"].iloc[0]
-           - lvs[lvs.category == "Đèn tín hiệu"]["mean_map50_95"].iloc[0])
-    st.metric("Chênh lệch mAP@0.5:0.95", f"{gap:.3f}",
-              help="Mann–Whitney p = 0,0095 (biển > đèn)")
-    fig("02_*.png")
-    table("audit_light_vs_sign.csv")
+    with st.expander("B · Khoảng cách đèn tín hiệu vs biển báo"):
+        lvs = pd.read_csv(RESULTS_TABLES / "audit_light_vs_sign.csv")
+        gap = (lvs[lvs.category == "Biển báo"]["mean_map50_95"].iloc[0]
+               - lvs[lvs.category == "Đèn tín hiệu"]["mean_map50_95"].iloc[0])
+        st.metric("Chênh lệch mAP@0.5:0.95", f"{gap:.3f}",
+                  help="Mann–Whitney p = 0,0095 (biển > đèn)")
+        fig("02_*.png")
+        table("audit_light_vs_sign.csv")
 
-    st.subheader("C · Độ hiếm KHÔNG giải thích được thất bại")
-    rv = pd.read_csv(RESULTS_TABLES / "audit_rarity_vs_ap.csv").iloc[0]
-    st.markdown(
-        f"Spearman(số instance, mAP) = **{rv['spearman_instances_vs_map5095']:.3f}** "
-        f"(p = {rv['p_instances_vs_map5095']:.2f}) — không có tương quan. "
-        f"Hai lớp **nhiều instance nhất** trên test (Green Light, Red Light) lại **kém nhất**. "
-        f"Nguyên nhân là bản chất vật thể, không phải mất cân bằng.")
-    fig("03_*.png")
+    with st.expander("C · Độ hiếm KHÔNG giải thích được thất bại"):
+        rv = pd.read_csv(RESULTS_TABLES / "audit_rarity_vs_ap.csv").iloc[0]
+        st.markdown(
+            f"Spearman(số instance, mAP) = **{rv['spearman_instances_vs_map5095']:.3f}** "
+            f"(p = {rv['p_instances_vs_map5095']:.2f}) — không có tương quan. "
+            f"Hai lớp **nhiều instance nhất** trên test (Green Light, Red Light) lại **kém nhất**. "
+            f"Nguyên nhân là bản chất vật thể, không phải mất cân bằng.")
+        fig("03_*.png")
 
     st.subheader("Bảng số liệu chi tiết")
     st.markdown("Các bảng dưới đây là dữ liệu nền dùng để sinh biểu đồ và kiểm định trong phần trên.")
@@ -174,45 +251,62 @@ with tab_demo:
         with c2:
             fig("demo_light.png", "Đèn đỏ — độ tin cậy THẤP (bị gắn cờ)", width=520)
     else:
+        image_tab, video_tab = st.tabs(["Ảnh", "Video"])
         sample_dir = REPO / "app" / "samples"
         samples = sorted(sample_dir.glob("*.jpg")) if sample_dir.exists() else []
-        up = st.file_uploader("Tải ảnh (JPG/PNG)", type=["jpg", "jpeg", "png"])
-        pick = None
-        if samples:
-            names = ["(không chọn)"] + [p.name for p in samples]
-            sel = st.selectbox("…hoặc chọn ảnh mẫu", names)
-            if sel != "(không chọn)":
-                pick = sample_dir / sel
 
-        img_bgr = None
-        if up is not None:
-            arr = np.frombuffer(up.read(), np.uint8)
-            img_bgr = cv2.imdecode(arr, cv2.IMREAD_COLOR)
-        elif pick is not None:
-            img_bgr = cv2.imread(str(pick))
+        with image_tab:
+            up = st.file_uploader("Tải ảnh (JPG/PNG)", type=["jpg", "jpeg", "png"])
+            pick = None
+            if samples:
+                names = ["(không chọn)"] + [p.name for p in samples]
+                sel = st.selectbox("…hoặc chọn ảnh mẫu", names)
+                if sel != "(không chọn)":
+                    pick = sample_dir / sel
 
-        if img_bgr is None:
-            st.info("Chọn ảnh mẫu hoặc tải ảnh lên để chạy phát hiện.")
-        else:
-            with st.spinner("Đang chạy YOLOv8…"):
-                out = detect(img_bgr, conf=DEFAULT_DEMO_CONF)
-            c1, c2 = st.columns([3, 2])
-            with c1:
-                if out["image"] is not None:
-                    st.image(fit_demo_image(out["image"]), caption=out["note"], width="content")
-            with c2:
-                if out["detections"]:
-                    dfd = pd.DataFrame(out["detections"])
-                    st.dataframe(dfd, width="stretch", hide_index=True)
-                    lights = [d for d in out["detections"] if d["Nhóm"] == "Đèn tín hiệu"]
-                    if lights:
-                        st.error(
-                            f"⚠️ Phát hiện {len(lights)} đối tượng thuộc nhóm **đèn tín hiệu** — "
-                            f"nhóm chỉ đạt mAP@.5:.95 ≈ 0,54 trong kiểm định. Kết quả cần thận trọng.")
+            img_bgr = None
+            if up is not None:
+                arr = np.frombuffer(up.read(), np.uint8)
+                img_bgr = cv2.imdecode(arr, cv2.IMREAD_COLOR)
+            elif pick is not None:
+                img_bgr = cv2.imread(str(pick))
+
+            if img_bgr is None:
+                st.info("Chọn ảnh mẫu hoặc tải ảnh lên để chạy phát hiện.")
+            else:
+                with st.spinner("Đang chạy YOLOv8…"):
+                    out = detect(img_bgr, conf=DEFAULT_DEMO_CONF)
+                c1, c2 = st.columns([3, 2])
+                with c1:
+                    if out["image"] is not None:
+                        st.image(fit_demo_image(out["image"]), caption=out["note"], width="content")
+                with c2:
+                    if out["detections"]:
+                        dfd = pd.DataFrame(out["detections"])
+                        st.dataframe(dfd, width="stretch", hide_index=True)
+                        lights = [d for d in out["detections"] if d["Nhóm"] == "Đèn tín hiệu"]
+                        if lights:
+                            st.error(
+                                f"⚠️ Phát hiện {len(lights)} đối tượng thuộc nhóm **đèn tín hiệu** — "
+                                f"nhóm chỉ đạt mAP@.5:.95 ≈ 0,54 trong kiểm định. Kết quả cần thận trọng.")
+                        else:
+                            st.success("✓ Toàn bộ phát hiện thuộc nhóm biển báo — nhóm có độ tin cậy cao (mAP ≈ 0,85).")
                     else:
-                        st.success("✓ Toàn bộ phát hiện thuộc nhóm biển báo — nhóm có độ tin cậy cao (mAP ≈ 0,85).")
-                else:
-                    st.info(out["note"])
+                        st.info(out["note"])
+
+        with video_tab:
+            video = st.file_uploader("Tải video (MP4/MOV/AVI)", type=["mp4", "mov", "avi"])
+            if video is None:
+                st.info("Tải video lên để chạy mô phỏng phát hiện.")
+            else:
+                with st.spinner("Đang chạy YOLOv8 trên video…"):
+                    try:
+                        output_path, summary = process_video(video, detect, cv2)
+                    except Exception as e:
+                        st.error(str(e))
+                    else:
+                        st.video(output_path.read_bytes(), format="video/mp4")
+                        st.dataframe(pd.DataFrame([summary]), width="stretch", hide_index=True)
 
 st.divider()
 st.caption("Nhóm: Huỳnh Phát Lợi · Đoàn Huỳnh Thanh Tú · Võ Phú Vinh.")

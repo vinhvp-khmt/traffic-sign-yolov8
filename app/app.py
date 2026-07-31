@@ -7,7 +7,6 @@ Dashboard trình bày phân tích thứ cấp trên kết quả notebook Kaggle:
 """
 from __future__ import annotations
 
-import base64
 import shutil
 import subprocess
 import sys
@@ -162,18 +161,6 @@ def process_video(uploaded_video, detect, cv2):
         "Khung hình có đèn tín hiệu": light_frames,
         "Chuẩn phát web": "H.264" if transcoded else "MP4 gốc",
     }
-
-
-def show_video(path):
-    data = base64.b64encode(path.read_bytes()).decode("ascii")
-    st.markdown(
-        f"""
-        <video controls style="width: {VIDEO_DISPLAY_WIDTH}px; max-width: 100%; height: auto;">
-          <source src="data:video/mp4;base64,{data}" type="video/mp4">
-        </video>
-        """,
-        unsafe_allow_html=True,
-    )
 
 
 st.title("🚦 Kiểm định độ tin cậy — YOLOv8 phát hiện biển báo (pkdarabi/cardetection)")
@@ -353,7 +340,11 @@ with tab_demo:
                     except Exception as e:
                         st.error(str(e))
                     else:
-                        show_video(output_path)
+                        st.video(
+                            output_path.read_bytes(),
+                            format="video/mp4",
+                            width=VIDEO_DISPLAY_WIDTH,
+                        )
                         st.dataframe(pd.DataFrame([summary]), width="stretch", hide_index=True)
 
 st.divider()

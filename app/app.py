@@ -67,15 +67,10 @@ c5.metric("Imbalance ratio", f"{ds['dominant_class_instances']/ds['rarest_class_
 
 (
     tab_intro,
-    tab_overview,
-    tab_leakage,
-    tab_light_sign,
-    tab_rarity,
+    tab_analysis,
     tab_demo,
-    tab_tables,
 ) = st.tabs([
-    "📌 Giới thiệu đề tài", "🔎 Tổng quan", "🅰️ Rò rỉ dữ liệu", "🅱️ Đèn vs Biển",
-    "🅲 Hiếm ≠ Khó", "🎬 Demo phát hiện", "📋 Bảng đầy đủ",
+    "📌 Giới thiệu đề tài", "📊 Phân tích dữ liệu", "🎬 Mô phỏng ứng dụng",
 ])
 
 with tab_intro:
@@ -104,7 +99,7 @@ with tab_intro:
     ])
     st.dataframe(students, width="stretch", hide_index=True)
 
-with tab_overview:
+with tab_analysis:
     st.subheader("Ba phát hiện kiểm định")
     kf = pd.read_csv(RESULTS_TABLES / "audit_key_findings.csv")
     for _, r in kf.iterrows():
@@ -112,10 +107,10 @@ with tab_overview:
             st.markdown(f"**[{r['ma']}] {r['phat_hien']}**")
             st.markdown(f"- *Bằng chứng:* {r['bang_chung']}")
             st.markdown(f"- *Hệ quả:* {r['he_qua']}")
+
     st.subheader("Hiệu năng theo lớp")
     fig("01_*.png")
 
-with tab_leakage:
     st.subheader("A · Rò rỉ dữ liệu xuyên split")
     st.markdown(
         "Notebook tự phát hiện trùng lặp nhưng **chỉ loại 91 ảnh khỏi train**; "
@@ -124,7 +119,6 @@ with tab_leakage:
     fig("04_*.png")
     table("audit_leakage_exposure.csv")
 
-with tab_light_sign:
     st.subheader("B · Khoảng cách đèn tín hiệu vs biển báo")
     lvs = pd.read_csv(RESULTS_TABLES / "audit_light_vs_sign.csv")
     gap = (lvs[lvs.category == "Biển báo"]["mean_map50_95"].iloc[0]
@@ -134,7 +128,6 @@ with tab_light_sign:
     fig("02_*.png")
     table("audit_light_vs_sign.csv")
 
-with tab_rarity:
     st.subheader("C · Độ hiếm KHÔNG giải thích được thất bại")
     rv = pd.read_csv(RESULTS_TABLES / "audit_rarity_vs_ap.csv").iloc[0]
     st.markdown(
@@ -144,8 +137,19 @@ with tab_rarity:
         f"Nguyên nhân là bản chất vật thể, không phải mất cân bằng.")
     fig("03_*.png")
 
+    st.subheader("Bảng số liệu chi tiết")
+    st.markdown("Các bảng dưới đây là dữ liệu nền dùng để sinh biểu đồ và kiểm định trong phần trên.")
+    st.markdown("**Metric theo lớp trên tập test**")
+    table("per_class_metrics.csv")
+    st.markdown("**Mất cân bằng lớp**")
+    fig("05_*.png")
+    table("imbalance_metrics.csv")
+    st.markdown("**Vật thể nhỏ theo độ phân giải**")
+    fig("06_*.png")
+    table("resolution_analysis.csv")
+
 with tab_demo:
-    st.subheader("🎬 Demo phát hiện trực tiếp — YOLOv8 gắn với độ tin cậy đã kiểm định")
+    st.subheader("🎬 Mô phỏng ứng dụng — YOLOv8 gắn với độ tin cậy đã kiểm định")
     st.markdown(
         "Tải một ảnh giao thông (hoặc chọn ảnh mẫu). Mô hình YOLOv8 đã huấn luyện sẽ vẽ hộp; "
         "với **mỗi** phát hiện, demo đối chiếu **độ tin cậy đã kiểm định** của lớp đó. Nếu là lớp "
@@ -209,16 +213,6 @@ with tab_demo:
                         st.success("✓ Toàn bộ phát hiện thuộc nhóm biển báo — nhóm có độ tin cậy cao (mAP ≈ 0,85).")
                 else:
                     st.info(out["note"])
-
-with tab_tables:
-    st.subheader("Metric theo lớp (test)")
-    table("per_class_metrics.csv")
-    st.subheader("Mất cân bằng")
-    fig("05_*.png")
-    table("imbalance_metrics.csv")
-    st.subheader("Vật thể nhỏ theo độ phân giải")
-    fig("06_*.png")
-    table("resolution_analysis.csv")
 
 st.divider()
 st.caption("Nhóm: Huỳnh Phát Lợi · Đoàn Huỳnh Thanh Tú · Võ Phú Vinh.")

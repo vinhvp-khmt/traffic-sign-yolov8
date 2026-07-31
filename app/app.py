@@ -161,8 +161,9 @@ with tab_demo:
 
     if not ok_backend:
         st.warning(f"Không chạy được suy luận trực tiếp: {msg}")
-        st.markdown("Cài `pip install ultralytics opencv-python-headless` và đặt trọng số vào "
-                    "`models/best.pt`. Dưới đây là hai ảnh demo đã kết xuất sẵn:")
+        st.markdown("Cài `pip install ultralytics opencv-python-headless`; app sẽ tự tải "
+                    "`best.pt` từ Hugging Face khi chạy suy luận. Dưới đây là hai ảnh demo "
+                    "đã kết xuất sẵn:")
         c1, c2 = st.columns(2)
         with c1:
             fig("demo_sign.png", "Biển báo — độ tin cậy CAO", width=520)

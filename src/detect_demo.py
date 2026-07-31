@@ -1,29 +1,31 @@
 """Suy luận YOLO cho tab demo của app — src/detect_demo.py.
 
-Tải trọng số YOLOv8 đã huấn luyện (best.pt) và chạy phát hiện trên một ảnh, rồi GẮN mỗi phát
-hiện với độ tin cậy đã kiểm định của lớp tương ứng (từ results/tables/per_class_metrics.csv).
+Tải trọng số YOLOv8 đã huấn luyện từ Hugging Face và chạy phát hiện trên một ảnh, rồi GẮN mỗi
+phát hiện với độ tin cậy đã kiểm định của lớp tương ứng (từ results/tables/per_class_metrics.csv).
 Đây là điểm nối giữa demo trực quan và câu chuyện kiểm định: nếu mô hình phát hiện một lớp có
 mAP thấp (ví dụ Red Light 0,506), demo sẽ cảnh báo độ tin cậy thấp.
 
-Thiết kế phòng thủ: nếu thiếu ultralytics/torch hoặc thiếu best.pt, hàm trả về trạng thái rõ
-ràng để app hiển thị hướng dẫn thay vì lỗi.
+Thiết kế phòng thủ: nếu thiếu ultralytics/torch hoặc không tải được best.pt, hàm trả về trạng
+thái rõ ràng để app hiển thị hướng dẫn thay vì lỗi.
 """
 from __future__ import annotations
 
 import os
 from functools import lru_cache
 from pathlib import Path
+from urllib.error import URLError
+from urllib.request import urlretrieve
 
 import numpy as np
 import pandas as pd
 
 from src.utils.paths import REPO_ROOT, RESULTS_TABLES
 
-# Vị trí tìm trọng số: biến môi trường -> models/best.pt trong project (đã bundle sẵn).
-WEIGHT_CANDIDATES = [
-    os.environ.get("TYA_WEIGHTS", ""),
-    str(REPO_ROOT / "models" / "best.pt"),
-]
+WEIGHTS_URL = (
+    "https://huggingface.co/datasets/vancevo/traffic-sign-yolov8/"
+    "resolve/main/best.pt"
+)
+WEIGHTS_CACHE = REPO_ROOT / ".cache" / "weights" / "best.pt"
 
 # Bảng màu cố định theo class_id để ảnh tái lập.
 def class_color(cid: int):
@@ -32,11 +34,28 @@ def class_color(cid: int):
     return tuple(rng.randint(40, 230) for _ in range(3))
 
 
-def find_weights() -> str | None:
-    for c in WEIGHT_CANDIDATES:
-        if c and Path(c).exists():
-            return c
-    return None
+def download_weights() -> Path:
+    """Tải best.pt từ Hugging Face vào cache local nếu chưa có."""
+    override = os.environ.get("TYA_WEIGHTS")
+    if override:
+        path = Path(override).expanduser()
+        if path.exists():
+            return path
+        raise FileNotFoundError(f"TYA_WEIGHTS không tồn tại: {path}")
+
+    if WEIGHTS_CACHE.exists() and WEIGHTS_CACHE.stat().st_size > 0:
+        return WEIGHTS_CACHE
+
+    WEIGHTS_CACHE.parent.mkdir(parents=True, exist_ok=True)
+    tmp = WEIGHTS_CACHE.with_suffix(".pt.tmp")
+    try:
+        urlretrieve(WEIGHTS_URL, tmp)
+        tmp.replace(WEIGHTS_CACHE)
+    except (OSError, URLError) as e:
+        if tmp.exists():
+            tmp.unlink()
+        raise RuntimeError(f"Không tải được best.pt từ Hugging Face: {e}") from e
+    return WEIGHTS_CACHE
 
 
 def backend_available() -> tuple[bool, str]:
@@ -45,15 +64,17 @@ def backend_available() -> tuple[bool, str]:
         import ultralytics  # noqa: F401
     except Exception as e:
         return False, f"Thiếu thư viện: {e}. Cài: pip install ultralytics"
-    if find_weights() is None:
-        return False, "Không tìm thấy best.pt. Đặt vào models/best.pt hoặc set TYA_WEIGHTS."
-    return True, "sẵn sàng"
+    try:
+        weights = download_weights()
+    except Exception as e:
+        return False, str(e)
+    return True, f"sẵn sàng ({weights})"
 
 
 @lru_cache(maxsize=1)
 def _load_model():
     from ultralytics import YOLO
-    return YOLO(find_weights())
+    return YOLO(download_weights())
 
 
 @lru_cache(maxsize=1)

@@ -33,7 +33,7 @@ traffic-yolo-analysis/
 │   └── run_pipeline.py               chạy cả ba bước
 ├── app/app.py             ứng dụng web Streamlit (có tab DEMO phát hiện trực tiếp)
 ├── app/samples/           ảnh mẫu cho demo (có ảnh chứa đèn tín hiệu)
-├── models/best.pt         trọng số YOLOv8 đã huấn luyện (đính kèm, cho tab demo)
+├── models/                thư mục local cho trọng số nếu cần override thủ công
 ├── tests/                 pytest (6/6 đạt)
 ├── results/tables|figs/   sinh tự động
 └── reports/
@@ -57,9 +57,12 @@ streamlit run app/app.py            # ứng dụng web (mở tab "Demo phát hi�
 ```
 
 **Tab Demo phát hiện:** tải một ảnh giao thông (hoặc chọn ảnh mẫu trong `app/samples/`) →
-YOLOv8 (`models/best.pt`) vẽ hộp → mỗi phát hiện được gắn **độ tin cậy đã kiểm định** của lớp.
+YOLOv8 tự tải trọng số từ
+`https://huggingface.co/datasets/vancevo/traffic-sign-yolov8/resolve/main/best.pt` và vẽ hộp →
+mỗi phát hiện được gắn **độ tin cậy đã kiểm định** của lớp.
 Nếu phát hiện thuộc nhóm đèn tín hiệu (mAP thấp), app **cảnh báo** kết quả cần thận trọng — nối
-demo trực quan với câu chuyện kiểm định. Chạy trên CPU; nếu thiếu `ultralytics`/`best.pt`, app
-tự hiện hai ảnh demo kết xuất sẵn thay vì báo lỗi.
+demo trực quan với câu chuyện kiểm định. Chạy trên CPU; model tải về được cache tại
+`.cache/weights/best.pt`. Nếu thiếu `ultralytics` hoặc không tải được model, app tự hiện hai ảnh
+demo kết xuất sẵn thay vì báo lỗi. Có thể override đường dẫn bằng biến môi trường `TYA_WEIGHTS`.
 
 **Nhóm:** Huỳnh Phát Lợi (KHMT836016) · Đoàn Huỳnh Thanh Tú (KHMT836034) · Võ Phú Vinh (KHMT836036)

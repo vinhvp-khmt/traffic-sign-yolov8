@@ -58,6 +58,27 @@ def fit_demo_image(image):
     return out
 
 
+def summarize_detections(detections, count_label="Số lượng"):
+    if not detections:
+        return pd.DataFrame()
+
+    df = pd.DataFrame(detections)
+    summary = (
+        df.groupby(["Lớp", "Nhóm", "mAP@.5:.95 (kiểm định)", "Độ tin cậy lớp"], as_index=False)
+        .agg(
+            **{
+                count_label: ("Lớp", "size"),
+                "Độ tin YOLO TB": ("Độ tin YOLO", "mean"),
+                "Độ tin YOLO cao nhất": ("Độ tin YOLO", "max"),
+            }
+        )
+        .sort_values([count_label, "Độ tin YOLO cao nhất"], ascending=False)
+    )
+    summary["Độ tin YOLO TB"] = summary["Độ tin YOLO TB"].round(3)
+    summary["Độ tin YOLO cao nhất"] = summary["Độ tin YOLO cao nhất"].round(3)
+    return summary
+
+
 def resize_frame(frame_bgr, cv2):
     h, w = frame_bgr.shape[:2]
     scale = min(1.0, VIDEO_MAX_SIDE / max(h, w))
@@ -137,12 +158,14 @@ def process_video(uploaded_video, detect, cv2):
     frame_index = 0
     total_detections = 0
     light_frames = 0
+    all_detections = []
 
     while ok:
         frame = resize_frame(frame, cv2)
         out = detect(frame, conf=DEFAULT_DEMO_CONF)
         annotated = out["image"]
         detections = out["detections"]
+        all_detections.extend(detections)
         total_detections += len(detections)
         if any(d["Nhóm"] == "Đèn tín hiệu" for d in detections):
             light_frames += 1
@@ -159,12 +182,17 @@ def process_video(uploaded_video, detect, cv2):
     playable_path = transcode_for_browser(output_path)
     progress.empty()
     status.empty()
+    class_summary = summarize_detections(all_detections, count_label="Số lượt phát hiện")
+    sign_hits = sum(1 for d in all_detections if d["Nhóm"] == "Biển báo")
+    light_hits = sum(1 for d in all_detections if d["Nhóm"] == "Đèn tín hiệu")
     return playable_path, {
         "Số khung hình": frame_index,
         "Tổng phát hiện": total_detections,
+        "Số lượt biển báo": sign_hits,
+        "Số lượt đèn tín hiệu": light_hits,
         "Khung hình có đèn tín hiệu": light_frames,
         "Chuẩn phát web": "H.264",
-    }
+    }, class_summary
 
 
 st.title("🚦 Kiểm định độ tin cậy — YOLOv8 phát hiện biển báo (pkdarabi/cardetection)")
@@ -322,6 +350,10 @@ with tab_demo:
                 with c2:
                     if out["detections"]:
                         dfd = pd.DataFrame(out["detections"])
+                        stats = summarize_detections(out["detections"])
+                        st.markdown("**Thống kê biển báo/đèn trong ảnh**")
+                        st.dataframe(stats, width="stretch", hide_index=True)
+                        st.markdown("**Chi tiết từng phát hiện**")
                         st.dataframe(dfd, width="stretch", hide_index=True)
                         lights = [d for d in out["detections"] if d["Nhóm"] == "Đèn tín hiệu"]
                         if lights:
@@ -340,7 +372,7 @@ with tab_demo:
             else:
                 with st.spinner("Đang chạy YOLOv8 trên video…"):
                     try:
-                        output_path, summary = process_video(video, detect, cv2)
+                        output_path, summary, class_summary = process_video(video, detect, cv2)
                     except Exception as e:
                         st.error(str(e))
                     else:
@@ -349,7 +381,13 @@ with tab_demo:
                             format="video/mp4",
                             width=VIDEO_DISPLAY_WIDTH,
                         )
+                        st.markdown("**Thống kê biển báo/đèn trong video output**")
                         st.dataframe(pd.DataFrame([summary]), width="stretch", hide_index=True)
+                        if not class_summary.empty:
+                            st.markdown("**Các lớp được phát hiện**")
+                            st.dataframe(class_summary, width="stretch", hide_index=True)
+                        else:
+                            st.info("Không phát hiện biển báo hoặc đèn tín hiệu nào trong video.")
 
 st.divider()
 st.caption("Nhóm: Huỳnh Phát Lợi · Đoàn Huỳnh Thanh Tú · Võ Phú Vinh.")

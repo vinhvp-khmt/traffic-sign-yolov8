@@ -372,7 +372,7 @@ with tab_demo:
             else:
                 with st.spinner("Đang chạy YOLOv8 trên video…"):
                     try:
-                        output_path, summary, class_summary = process_video(video, detect, cv2)
+                        output_path, _summary, class_summary = process_video(video, detect, cv2)
                     except Exception as e:
                         st.error(str(e))
                     else:
@@ -381,8 +381,6 @@ with tab_demo:
                             format="video/mp4",
                             width=VIDEO_DISPLAY_WIDTH,
                         )
-                        st.markdown("**Thống kê biển báo/đèn trong video output**")
-                        st.dataframe(pd.DataFrame([summary]), width="stretch", hide_index=True)
                         if not class_summary.empty:
                             st.markdown("**Các lớp được phát hiện**")
                             st.dataframe(class_summary, width="stretch", hide_index=True)
